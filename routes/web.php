@@ -1,11 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RegisterController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/register', function () {
-    return view('welcome'); // or your custom register view
-})->name('register');
+Route::get('/', [RegisterController::class, 'show'])->name('home');
+Route::post('/register', [RegisterController::class, 'store'])->name('register.store');

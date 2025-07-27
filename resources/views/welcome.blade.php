@@ -2,6 +2,8 @@
  <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
  <head>
+     <!-- SweetAlert2 CDN -->
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
      <meta charset="utf-8">
      <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -45,30 +47,67 @@
          </nav>
          @endif
      </header>
+     @if(session('success'))
+     <div class="alert alert-success alert-dismissible fade show mx-auto w-100" role="alert" style="max-width:400px;">
+         <strong>Success!</strong> {{ session('success') }}
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+     </div>
+     @endif
      <div class="container" style="max-width: 400px;">
          <div class="card shadow-lg border-0 mt-4">
              <div class="card-body p-4">
                  <h2 class="mb-4 text-center text-primary">Register</h2>
-                 <form method="POST" action="{{ route('register') }}">
-                     @csrf
-                     <div class="mb-3">
-                         <label for="name" class="form-label">Name</label>
-                         <input type="text" class="form-control rounded-pill" id="name" name="name" required autofocus>
+                 <button type="button" class="btn btn-primary w-100 rounded-pill mb-3" data-bs-toggle="modal" data-bs-target="#registerModal">Open Register Modal</button>
+                 <!-- Modal -->
+                 <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+                   <div class="modal-dialog">
+                     <div class="modal-content">
+                       <div class="modal-header">
+                         <h5 class="modal-title" id="registerModalLabel">Register User</h5>
+                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                       </div>
+                       <form method="POST" action="{{ route('register.store') }}">
+                         @csrf
+                         <div class="modal-body">
+                           <div class="mb-3">
+                             <label for="modalName" class="form-label">Name</label>
+                             <input type="text" class="form-control" id="modalName" name="name" required autofocus>
+                           </div>
+                           <div class="mb-3">
+                             <label for="modalPassword" class="form-label">Password</label>
+                             <input type="password" class="form-control" id="modalPassword" name="password" required>
+                           </div>
+                         </div>
+                         <div class="modal-footer">
+                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                           <button type="submit" class="btn btn-primary">Submit</button>
+                         </div>
+                       </form>
                      </div>
-                     <div class="mb-3">
-                         <label for="email" class="form-label">Email address</label>
-                         <input type="email" class="form-control rounded-pill" id="email" name="email" required>
-                     </div>
-                     <div class="mb-3">
-                         <label for="password" class="form-label">Password</label>
-                         <input type="password" class="form-control rounded-pill" id="password" name="password" required>
-                     </div>
-                     <div class="mb-3">
-                         <label for="password_confirmation" class="form-label">Confirm Password</label>
-                         <input type="password" class="form-control rounded-pill" id="password_confirmation" name="password_confirmation" required>
-                     </div>
-                     <button type="submit" class="btn btn-primary w-100 rounded-pill">Register</button>
-                 </form>
+                   </div>
+                 </div>
+                 <!-- Users Table -->
+                 <h4 class="mt-4 mb-2 text-center">Submitted Users</h4>
+                 <table class="table table-bordered table-striped">
+                     <thead>
+                         <tr>
+                             <th>ID</th>
+                             <th>Name</th>
+                             <th>Password</th>
+                             <th>Registered At</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         @foreach($users as $user)
+                         <tr>
+                             <td>{{ $user->id }}</td>
+                             <td>{{ $user->name }}</td>
+                             <td>{{ $user->password }}</td>
+                             <td>{{ $user->created_at }}</td>
+                         </tr>
+                         @endforeach
+                     </tbody>
+                 </table>
              </div>
          </div>
      </div>
