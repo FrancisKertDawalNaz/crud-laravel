@@ -12,6 +12,7 @@
      <!-- Fonts -->
      <link rel="preconnect" href="https://fonts.bunny.net">
      <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 
      <!-- Bootstrap CSS CDN -->
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -20,50 +21,32 @@
  </head>
 
  <body class="bg-light text-dark d-flex p-4 justify-content-center align-items-center min-vh-100 flex-column">
-     <header class="w-100 mb-4">
-         @if (Route::has('login'))
-         <nav class="d-flex justify-content-end gap-2">
-             @auth
-             <a
-                 href="{{ url('/dashboard') }}"
-                 class="btn btn-outline-dark px-3 py-2">
-                 Dashboard
-             </a>
-             @else
-             <a
-                 href="{{ route('login') }}"
-                 class="btn btn-outline-dark px-3 py-2">
-                 Log in
-             </a>
-
-             @if (Route::has('register'))
-             <a
-                 href="{{ route('register') }}"
-                 class="btn btn-outline-dark px-3 py-2">
-                 Register
-             </a>
-             @endif
-             @endauth
-         </nav>
-         @endif
-     </header>
      @if(session('success'))
-     <div class="alert alert-success alert-dismissible fade show mx-auto w-100" role="alert" style="max-width:400px;">
+     <div class="alert alert-success alert-dismissible fade show mx-auto w-100" role="alert" style="max-width:1000px;">
          <strong>Success!</strong> {{ session('success') }}
          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
      </div>
      @endif
-     <div class="container" style="max-width: 400px;">
-         <div class="card shadow-lg border-0 mt-4">
+     <div class="container" style="max-width: 1000px;">
+         <div class="card shadow-lg border-5 mt-4">
              <div class="card-body p-4">
                  <h2 class="mb-4 text-center text-primary">Register</h2>
-                 <button type="button" class="btn btn-primary w-100 rounded-pill mb-3" data-bs-toggle="modal" data-bs-target="#registerModal">Open Register Modal</button>
+                 <div class="container">
+                     <div class="row">
+                         <div class="col-md-4 text-start">
+                             <button type="button" class="btn btn-primary w-80 rounded-1 mb-4" data-bs-toggle="modal" data-bs-target="#registerModal">
+                                 Open Register Modal
+                             </button>
+                         </div>
+                     </div>
+                 </div>
+
                  <!-- Modal -->
                  <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
                      <div class="modal-dialog">
-                         <div class="modal-content">
-                             <div class="modal-header">
-                                 <h5 class="modal-title" id="registerModalLabel">Register User</h5>
+                         <div class="modal-content rounded-3 shadow-lg" style="border: none;">
+                             <div class="modal-header" style="background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);">
+                                 <h5 class="modal-title text-white" id="registerModalLabel">Register User</h5>
                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                              </div>
                              <form method="POST" action="{{ route('register.store') }}">
@@ -74,28 +57,32 @@
                                          <input type="text" class="form-control" id="modalName" name="name" required autofocus>
                                      </div>
                                      <div class="mb-3">
+                                         <label for="modalEmail" class="form-label">Email</label>
+                                         <input type="email" class="form-control" id="modalEmail" name="email" required>
+                                     </div>
+                                     <div class="mb-3">
                                          <label for="modalPassword" class="form-label">Password</label>
                                          <input type="password" class="form-control" id="modalPassword" name="password" required>
                                      </div>
                                  </div>
                                  <div class="modal-footer">
                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                     <button type="submit" class="btn btn-primary">Submit</button>
+                                     <button type="submit" class="btn btn-light" style="background-color: #6a11cb; color: white;">Submit</button>
                                  </div>
                              </form>
                          </div>
                      </div>
                  </div>
+
                  <!-- Users Table -->
-                 <h4 class="mt-4 mb-2 text-center">Submitted Users</h4>
-                 <table class="table table-bordered table-striped">
+                 <table class="table table-hover table-bordered table-striped">
                      <thead>
                          <tr>
-                             <th>ID</th>
-                             <th>Name</th>
-                             <th>Password</th>
-                             <th>Registered At</th>
-                             <th>Action</th>
+                             <th scope="col">ID</th>
+                             <th scope="col">Name</th>
+                             <th scope="col">Password</th>
+                             <th scope="col">Registered At</th>
+                             <th scope="col">Action</th>
                          </tr>
                      </thead>
                      <tbody>
@@ -120,9 +107,9 @@
                                  <!-- Edit Modal -->
                                  <div class="modal fade" id="editModal{{ $user->id }}" tabindex="-1" aria-labelledby="editModalLabel{{ $user->id }}" aria-hidden="true">
                                      <div class="modal-dialog">
-                                         <div class="modal-content">
-                                             <div class="modal-header">
-                                                 <h5 class="modal-title" id="editModalLabel{{ $user->id }}">Edit User</h5>
+                                         <div class="modal-content rounded-3 shadow-lg" style="border: none;">
+                                             <div class="modal-header" style="background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);">
+                                                 <h5 class="modal-title text-white" id="editModalLabel{{ $user->id }}">Edit User</h5>
                                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                              </div>
                                              <form method="POST" action="{{ route('user.update', $user->id) }}">
@@ -140,7 +127,7 @@
                                                  </div>
                                                  <div class="modal-footer">
                                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                     <button type="submit" class="btn btn-success">Save Changes</button>
+                                                     <button type="submit" class="btn btn-light" style="background-color: #6a11cb; color: white;">Save Changes</button>
                                                  </div>
                                              </form>
                                          </div>
